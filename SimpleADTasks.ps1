@@ -1,7 +1,7 @@
 ﻿Import-Module ActiveDirectory 
 # Site configuration
 $SiteCode = "C01" # Site code 
-$ProviderMachineName = "dayprdsccm01.caresource.corp" # SMS Provider machine name
+$ProviderMachineName = "serverblahblah.corp" # SMS Provider machine name
 
 function Show-Menu
 {
