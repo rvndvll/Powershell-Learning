@@ -1,4 +1,12 @@
-﻿$Computer = Read-Host "Enter the computer name, including the L or D."
+If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+
+{   
+$arguments = "& '" + $myinvocation.mycommand.definition + "'"
+Start-Process powershell -Verb runAs -ArgumentList $arguments
+Break
+}
+
+$Computer = Read-Host "Enter the computer name, including the L or D."
 $user = Read-Host "Enter the name of the user."
 $userinfo = Get-AdUser $user -Properties SID,ObjectGUID
 
