@@ -66,8 +66,8 @@
     $Guidregistrykey = "SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileGuid\{$guid}"
 
     Rename-Item -Path $path -NewName "$user.old"
-    #Remove-Item -Path $Profileregistrykey -Recurse
-    #Remove-Item -Path $Guidregistrykey -Recurse
+    Remove-Item -Path $Profileregistrykey -Recurse
+    Remove-Item -Path $Guidregistrykey -Recurse
    
     } -ArgumentList $userinfo,$user
 
