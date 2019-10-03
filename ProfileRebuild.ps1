@@ -1,4 +1,4 @@
-    #Opens PowerShell in Administrator 
+ #Opens PowerShell in Administrator 
     If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
 
     {   
@@ -32,6 +32,7 @@
     $path = "C:\Users\$user"
     $ComputerPing = $false
     $Online = $false
+    $olduser = "$user.old"
 
     #Tests Computer Connections
     Write-Host " "
@@ -70,6 +71,24 @@
     Remove-Item -Path $Guidregistrykey -Recurse
    
     } -ArgumentList $userinfo,$user
+    
+    #Wait for user to confirm they are logged back on to the desktop, then press enter to continue script
+    Write-Host -ForegroundColor Green "Confirm that the user is logged on and on the desktop, then press enter."
+    pause
+    
+    #Copies the desktop and favorites data from the .old to the new profile. Will add more later
+    Invoke-Command -Computer $Computer -ScriptBlock {
+    param( $user, $olduser)
 
+    
+    Copy-Item -Path "C:\Users\$olduser\Desktop\*" -Destination "C:\Users\$user\Desktop" -Recurse -force
+    Copy-Item -Path "C:\Users\$olduser\Favorites\*" -Destination "C:\Users\$user\Favorites" -Recurse -force
+    $stickypath = Test-Path "C:\Users\$olduser\AppData\Roaming\Microsoft\Sticky Notes\"
+    if ($stickypath -eq $true) {
+    Copy-Item -Path "C:\Users\$olduser\AppData\Roaming\Microsoft\Sticky Notes\" -Destination "C:\Users\$user\AppData\Roaming\Microsoft\" -Recurse -force
+    } 
 
+    } -ArgumentList $user,$olduser
+
+    Write-Host "Confirm that the user now sees their data. You can now press enter to close the script."
     pause
